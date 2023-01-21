@@ -1,4 +1,10 @@
 <h1>Capital Gains Tax Software</h1>
+
+<h2>Contributing</h2>
+As of now this software allows aggregation of Coinbase and Coinbase Pro transactions based off of their csv file format.
+Contributions are encouraged if you're interested, the goal is to allow this to work for many platforms and DEFI platforms concurrently.
+To Contribute create a PR.
+
 <h2>Instructions</h2>
 <ol>
   <li>Create an input directory in the base directory and place your Coinbase trades CSV file and your Coinbase Pro trades CSV files. In further iterations other trading csv types will be able to be accomodated</li>
