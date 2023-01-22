@@ -41,10 +41,11 @@ def map_csv_columns_and_write_to_file(input_df):
 
         mapped_row['Side'] = mapped_row['Side'].upper()
         mapped_rows.append(mapped_row)
-        
+
     mapped_df = pd.DataFrame(mapped_rows)
     return mapped_df
 
+# Takes in a list of dataframes and merges them
 def mergeTradesAndFilter(trade_dfs):
     merged_trade_file = 'output/MergedTrades.csv'
 
@@ -65,10 +66,10 @@ def mergeTradesAndFilter(trade_dfs):
 
     merged_df['Total'] = abs(merged_df['Total'])
 
-    merged_df.to_csv(merged_trade_file, index=False)
-
     print("Merged Trades and filtered for buy and sell transactions. See - " +
           merged_trade_file)
+    return merged_df
+
 
 
 def processTradeFiles():
@@ -84,5 +85,13 @@ def processTradeFiles():
     return trade_files
 
 
-trade_dfs = processTradeFiles()
-mergeTradesAndFilter(trade_dfs)
+def processTradeDataFrames(trade_dfs):
+    processed_trade_dfs = []
+    for df in trade_dfs:
+        mapped_df = map_csv_columns_and_write_to_file(df)
+        processed_trade_dfs.append(mapped_df)
+
+    return mergeTradesAndFilter(processed_trade_dfs)
+
+# trade_dfs = processTradeFiles()
+# mergeTradesAndFilter(trade_dfs)

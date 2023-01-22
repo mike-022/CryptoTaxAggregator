@@ -42,25 +42,32 @@ def agregateTransactions(input_df,output,year):
     grouped_df = pd.concat([grouped_df, sum_df], axis=0)
 
     grouped_df.to_csv(output)
+    return grouped_df
 
 
-# Calculating long gains for each year
-long_gains_df = pd.read_csv("output/Long_Gain_Calculation.csv")
-for year_to_calculate in long_gains_df["Year"].unique():
-    long_gains_df = long_gains_df.loc[long_gains_df["Year"] ==
-                                      year_to_calculate]
-    long_gain_output_file = "output/Long_Gain_" + str(year_to_calculate) + ".csv"
-    agregateTransactions(long_gains_df, long_gain_output_file, year_to_calculate)
-    print("Created Sample Capital Gains tax form refer to " +
-          long_gain_output_file + ".")
-
-# Calculating short gains for each year
-short_gains_df = pd.read_csv("output/Short_Gain_Calculation.csv")
-for year_to_calculate in short_gains_df["Year"].unique():
-    short_gains_df = short_gains_df.loc[short_gains_df["Year"] ==
+def calculateCapitalGainsFilesByYear(short_gains_df, long_gains_df):
+    cap_gains_by_year_dfs = []
+    # Calculating long gains for each year
+    for year_to_calculate in long_gains_df["Year"].unique():
+        long_gains_df = long_gains_df.loc[long_gains_df["Year"] ==
                                         year_to_calculate]
-    short_gain_output_file = "output/Short_Gain_" + str(
-        year_to_calculate) + ".csv"
-    agregateTransactions(short_gains_df, short_gain_output_file, year_to_calculate)
-    print("Created Sample Capital Gains tax form refer to " +
-        short_gain_output_file + ".")
+        long_gain_output_file = "output/Long_Gain_" + str(year_to_calculate) + ".csv"
+        grouped_df = agregateTransactions(long_gains_df,long_gain_output_file,
+                                       year_to_calculate)
+        cap_gains_by_year_dfs.append(grouped_df)
+        print("Created Sample Capital Gains tax form refer to " +
+            long_gain_output_file + ".")
+
+    # Calculating short gains for each year
+    for year_to_calculate in short_gains_df["Year"].unique():
+        short_gains_df = short_gains_df.loc[short_gains_df["Year"] ==
+                                            year_to_calculate]
+        short_gain_output_file = "output/Short_Gain_" + str(
+            year_to_calculate) + ".csv"
+        grouped_df = agregateTransactions(short_gains_df,short_gain_output_file,
+                                          year_to_calculate)
+        cap_gains_by_year_dfs.append(grouped_df)
+
+        print("Created Sample Capital Gains tax form refer to " +
+            short_gain_output_file + ".")
+    return cap_gains_by_year_dfs
