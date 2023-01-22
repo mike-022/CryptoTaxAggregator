@@ -1,0 +1,4 @@
+pandas
+flask
+celery
+flask_cors
